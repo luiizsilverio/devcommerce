@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 //import { useEffect, useState } from 'react'
-import { Title } from '../styles/Home'
+import { Title } from '@/styles/Home' //'../styles/Home'
 
 type Product = {
   id: string;
@@ -18,7 +18,7 @@ export default function Home({ products }: HomeProps) {
   // Estratégia CSF - Client-Side Fetching, é renderizado no cliente
   const [products, setProducts] = useState<Product[]>([])
   useEffect(() => {
-    fetch('http://localhost:3333/recommended')
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/recommended`)
       .then(res => {
         res.json()
           .then(data => {
@@ -47,7 +47,7 @@ export default function Home({ products }: HomeProps) {
 
 // Estratégia SSR - Server Side Rendering. No caso, na camada intermediária do Next
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
-  const response = await fetch('http://localhost:3333/recommended')
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recommended`)
   const prods = await response.json()
 
   return {
