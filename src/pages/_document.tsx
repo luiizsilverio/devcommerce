@@ -1,4 +1,5 @@
 import Document, { DocumentContext } from 'next/document'
+import { Html, Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheet } from 'styled-components'
 
 export default class MyDocument extends Document {
@@ -26,5 +27,24 @@ export default class MyDocument extends Document {
     } finally {
       sheet.seal()
     }
+  }
+
+  // Esse trecho foi adicionado para poder mudar a fonte para Roboto
+  // e também para definir o favicon
+
+  render() {  
+    return (
+      <Html lang="pt">
+        <Head>
+          <meta charSet="utf-8" />
+          <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+          <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+        </Head>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    )
   }
 }

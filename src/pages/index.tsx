@@ -2,6 +2,7 @@ import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 //import { useEffect, useState } from 'react'
 import { Title } from '@/styles/Home' //'../styles/Home'
+import SEO from '@/components/SEO'
 
 type Product = {
   id: string;
@@ -30,6 +31,13 @@ export default function Home({ products }: HomeProps) {
 
   return (
     <div>
+      <SEO 
+        title='DevCommerce' 
+        description='A melhor loja de roupas para Devs' 
+        includeSufix={false} 
+        image='nextjs-reactjs.png'
+      />
+
       <section>
         <Title>Products</Title>
         <ul>
