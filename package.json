@@ -1,5 +1,7 @@
 {
   "name": "curso-next",
+  "author": "Luiz Oliveira <luiiz.silverio@gmail.com>",
+  "repository": "https://github.com/luiizsilverio/curso-next",
   "version": "0.1.0",
   "private": true,
   "scripts": {
