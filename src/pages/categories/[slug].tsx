@@ -1,16 +1,17 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
+import Prismic from 'prismic-javascript'
+import PrismicDOM from 'prismic-dom'
+import { Document } from 'prismic-javascript/types/documents'
+import { client } from '@/lib/prismic'
 
-type CategoryProps = {
-    products: IProduct[]
+interface CategoryProps {
+    category: Document
+    products: Document[]
 }
 
-interface IProduct {
-    id: string
-    title: string
-}
-
-export default function Category({ products }: CategoryProps) {
+export default function Category({ category, products }: CategoryProps) {
     const router = useRouter()
 
     // A página está sendo gerada? (em processo de renderização estática)
@@ -20,14 +21,20 @@ export default function Category({ products }: CategoryProps) {
 
     return (
         <div>
-            <h1>{ router.query.slug }</h1>
+            <h1>
+                {PrismicDOM.RichText.asText(category.data.title)}
+            </h1>
             <ul>
-                {products.map(prod => (
-                    <li key={ prod.id }>
-                        { prod.title }
-                    </li>
-                    )
-                )}
+               {products.map(prod => (
+                 <li key={ prod.id }>
+                   <Link href={`/products/${ prod.uid }`}>
+                      <a>
+                        {PrismicDOM.RichText.asText(prod.data.title)}
+                      </a>
+                   </Link>
+                 </li>
+                 )
+               )}
             </ul>
         </div>
     )
@@ -46,12 +53,16 @@ export default function Category({ products }: CategoryProps) {
 // acessadas. Se a tabela for muito grande, é melhor paths: []
 
 export const getStaticPaths: GetStaticPaths = async () => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`)
-    const categories = await response.json()
+    //const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`)
+    //const categories = await response.json()
 
-    const paths = categories.map(category => {
+    const categories = await client().query([
+        Prismic.Predicates.at('document.type', 'category'),        
+    ])
+
+    const paths = categories.results.map(category => {
         return {
-            params: { slug: category.id }
+            params: { slug: category.uid }
         }
     })
     
@@ -64,11 +75,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps<CategoryProps> = async (context) => {
     const { slug } = context.params
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products?category_id=${slug}`) 
-    const products = await response.json()
+    const category = await client().getByUID('category', String(slug), {})
+
+    const products = await client().query([
+        Prismic.Predicates.at('document.type', 'product'),
+        Prismic.Predicates.at('my.product.category', category.id)
+    ])
 
     return {
-        props: { products },
+        props: { 
+            category, 
+            products: products.results 
+        },
         revalidate: 60  /* atualiza a cada 1 minuto */
     }
 }

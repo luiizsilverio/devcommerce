@@ -1,16 +1,14 @@
 import { GetServerSideProps } from 'next'
-import Head from 'next/head'
-//import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { Title } from '@/styles/Home' //'../styles/Home'
 import SEO from '@/components/SEO'
-
-type Product = {
-  id: string;
-  title: string;
-}
+import { client } from '@/lib/prismic'
+import Prismic from 'prismic-javascript'
+import PrismicDOM from 'prismic-dom'
+import { Document } from 'prismic-javascript/types/documents'
 
 type HomeProps = {
-  products: Product[]
+  products: Document[]
 }
 
 export default function Home({ products }: HomeProps) {
@@ -43,7 +41,11 @@ export default function Home({ products }: HomeProps) {
         <ul>
           {products.map(prod => (
             <li key={prod.id}>
-              {prod.title}
+              <Link href={`/products/${ prod.uid }`}>
+                <a>
+                  {PrismicDOM.RichText.asText(prod.data.title)}
+                </a>
+              </Link>
             </li>
           )
         )}
@@ -53,12 +55,20 @@ export default function Home({ products }: HomeProps) {
   )
 }
 
-// Estratégia SSR - Server Side Rendering. No caso, na camada intermediária do Next
+// Estratégia SSR - Server Side Rendering. 
+// No caso, na camada intermediária do Next
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recommended`)
-  const prods = await response.json()
 
+// Buscando os dados da API fake
+// const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recommended`)
+// const prods = await response.json()
+
+// Buscando os dados do Prismic
+  const prods = await client().query([
+    Prismic.Predicates.at('document.type', 'product') // todos os documentos do tipo product
+  ])
+  
   return {
-    props: { products: prods }
+    props: { products: prods.results }
   }
 }
