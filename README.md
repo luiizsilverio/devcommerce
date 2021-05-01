@@ -13,13 +13,12 @@ Projeto ainda sem muita estilização.<br />
 
 Para acessar a aplicação, clique [aqui :link:](https://dev-commerce.vercel.app)
 
-### Rotas do projeto:
+### Rotas do projeto
 
 | Descrição da Rota | Caminho da Rota |
 |---|---|
 | Categorias | localhost:3000 | 
 | Busca | localhost:3000/search |
-| Todos os produtos | localhost:3000/top10 |
 | Detalhes do produto | localhost:3000/products/:slug |
 
 ## :hammer_and_wrench: Tecnologias
