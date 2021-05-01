@@ -8,7 +8,10 @@
 ## Sobre o projeto
 Projeto desenvolvido em __React / Next__ durante o curso de Next (bônus) da __Rocketseat__,<br />
 utilizando todos os principais conceitos de SSR e SSG, páginas estáticas, páginas dinâmicas,<br />
-getServerSideProps, getStaticProps e getStaticPaths.
+getServerSideProps, getStaticProps e getStaticPaths.<br />
+Projeto ainda sem muita estilização.<br />
+
+Para acessar a aplicação, clique [aqui :link:](https://dev-commerce.vercel.app)
 
 ### Rotas do projeto:
 
