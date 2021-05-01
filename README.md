@@ -26,11 +26,6 @@ getServerSideProps, getStaticProps e getStaticPaths.
 * <ins>Styled-components</ins> para estilização
 * API do <ins>Prismic</ins>
 
-Para iniciar o servidor fake: 
-
-```bash
-yarn api
-```
 ## :balance_scale: Licença
 Este projeto está licenciado sob a [licença MIT](LICENSE).
 
